@@ -1,0 +1,12 @@
+{
+  "name": "Texteo-expo",
+  "displayName": "Texteo-expo",
+  "expo": {
+    "name": "Texteo-expo",
+    "slug": "Texteo-expo",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
