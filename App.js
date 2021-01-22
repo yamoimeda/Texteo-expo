@@ -1,19 +1,28 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View,FlatList,Text  } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { default as theme } from './theme.json';
+import * as eva from '@eva-design/eva';
+import  PantallaInicio  from "./pantallas/inicio";
+
 
 const Stack = createStackNavigator();
 
-function Inicio(){
+function Inicio({navigation }){
+  
   return(
-
-  <View style={styles.container}>
-  <Text>Open up App.js to start working on your app!</Text>
-  <StatusBar style="auto" />
+    <PantallaInicio navigation = {navigation}/>
+  /* <View style={styles.container}>
+    
+      <FlatList
+        data={DATA}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+      />
 </View> 
-
+*/
 
   );
 }
@@ -34,7 +43,10 @@ export default function App() {
   return (
   
     <NavigationContainer>
-    <Stack.Navigator>
+    <Stack.Navigator   screenOptions={{
+    headerShown: false
+  }}>
+      
       <Stack.Screen name="Inicio" component={Inicio} />
       <Stack.Screen name="Chats" component={Chats} />
     </Stack.Navigator>
@@ -44,9 +56,10 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    maxHeight: 192,
+  },
+  icon: {
+    width: 32,
+    height: 32,
   },
 });
