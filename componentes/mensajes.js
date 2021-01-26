@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,Image,ImageBackground} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,Image,ImageBackground,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const randomTime = () => {
@@ -46,7 +46,6 @@ export default Messages;
 
 const styles = StyleSheet.create({
     container:{
-        
         borderRadius:5,
         flexDirection:'row',
         marginHorizontal:20,

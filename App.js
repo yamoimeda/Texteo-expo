@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { default as theme } from './theme.json';
 import * as eva from '@eva-design/eva';
 import  PantallaInicio  from "./pantallas/inicio";
+import  Chat  from "./pantallas/chat";
 
 
 const Stack = createStackNavigator();
@@ -28,11 +29,9 @@ function Inicio({navigation }){
 }
 
 
-function Chats() {
+function Chats({route, navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-    </View>
+    <Chat navigation = {navigation} route={route}/>
   );
 }
 

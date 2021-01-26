@@ -5,7 +5,8 @@ import {
     ActivityIndicator,
     StyleSheet,
     Animated,
-    Image
+    Image,
+    Dimensions
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -44,13 +45,13 @@ export default  class Chats extends Component {
     render() {
       return (
         <LinearGradient
-        colors={['#FF7200', '#B73D00', '#7A1B00']}
+        colors={['#ce7329', '#b26120', '#7A1B00']}
         style={styles.gradient}
        >
            
            <View style={styles.headerContainer}>
                 <Text style={styles.header}>Mensajes</Text>
-                <Icon name='add' color='#fff' size={30}/>
+                <Icon name='add' color='#fff' size={Dimensions.get('window').width/10}/>
 
 
                 
@@ -58,14 +59,14 @@ export default  class Chats extends Component {
            <View style={styles.ops}>
                 <View style={styles.col}>
                     <View  style={styles.menus}>
-                        <Entypo name='chat' color= {this.state.chat ? '#FF7200' : '#fff' } size={25}/>
+                        <Entypo name='chat' color= {this.state.chat ? '#ce7329' : '#fff' } size={25}/>
                     </View>
                     
                     <View style={styles.menus}>
-                        <Fonta name='user-circle-o' color={this.state.perfil ? '#FF7200' : '#fff' } size={25}/>
+                        <Fonta name='user-circle-o' color={this.state.perfil ? '#ce7329' : '#fff' } size={25}/>
                     </View>
                     <View style={styles.menus}>
-                        <Entypo name='dots-three-horizontal' color={this.state.opt ? '#FF7200' : '#fff' } size={25}/>
+                        <Entypo name='dots-three-horizontal' color={this.state.opt ? '#ce7329' : '#fff' } size={25}/>
                     </View>
                    
              </View>
@@ -84,7 +85,7 @@ export default  class Chats extends Component {
                                                 uri={item.avatar_url}
                                                 count={Math.floor(Math.random() * 3)}
                                                 onPress={()=>{
-                                                    props.navigation.navigate('Chats',{
+                                                    this.props.navigation.navigate('Chats',{
                                                         itemId:item.id,
                                                         itemName:item.login,
                                                         itemPic:item.avatar_url
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
         fontFamily:'Montserrat_800ExtraBold',
         color:'#FFF',
         flex:1,
-        fontSize:22
+        fontSize: Dimensions.get('window').width/15
     },
     proContainer:{
         marginRight:-20,
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
         paddingBottom:10,
         alignItems:'center',
         borderBottomWidth:1,
-        borderColor:'#B73D00'
+        borderColor:'#ce7329'
     },
     day:{
         fontFamily:'Montserrat_800ExtraBold',
