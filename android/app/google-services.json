@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "823219983234",
+    "firebase_url": "https://nombre-animal-cosa.firebaseio.com",
+    "project_id": "nombre-animal-cosa",
+    "storage_bucket": "nombre-animal-cosa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823219983234:android:47d82f5d1f2bf0306b359b",
+        "android_client_info": {
+          "package_name": "com.texteoexpo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "823219983234-2ke9u9p4ak3adcstr9oiv1llntqkas0b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrQ7E_hMuIn8Eu4cOF-GR2hCns1j89W20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "823219983234-2ke9u9p4ak3adcstr9oiv1llntqkas0b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

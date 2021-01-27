@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         bottom:10,
         paddingHorizontal:20,
         paddingVertical:10,
-        borderRadius:30
+        borderRadius:30,
     },
     input:{
         fontFamily:'Montserrat_600SemiBold',

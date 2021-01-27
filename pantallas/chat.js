@@ -1,5 +1,5 @@
-import React,{useState,useRef} from 'react';
-import {View,Text,Image,StyleSheet,ImageBackground,Dimensions} from 'react-native';
+import React,{useState,useRef ,Component} from 'react';
+import {View,Text,Image,StyleSheet,ImageBackground,Dimensions,KeyboardAvoidingView,Platform, StatusBar } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from '@expo/vector-icons/AntDesign';
@@ -8,85 +8,120 @@ import Received from '../componentes/Received';
 import Sent from '../componentes/Sent';
 import Data from '../Data.json';
 import Input from '../componentes/Input'; 
+import { firebase } from '../firebase/config'
 
-const Discussion = ({ route, navigation }) => {
-    const { itemName , itemPic } = route.params;
-    const [inputMessage, setMessage] = useState('');
-    const scrollViewRef = useRef();
-    const send = () => {
-        Data.push({id:inputMessage,message:inputMessage});
-        setMessage('');
+export default class Discussion extends Component {
+    
+    constructor(props){
+      super(props)
+      this.state = {
+        inputMessage:'',
+        setMessage:'',
+        Data:[],
+        
+
+
+        }
+    }
+    componentDidMount (){
+        const docRef = firebase.firestore().collection('users').doc('alovelace')
+
+        docRef.set({
+        first: 'Ada',
+        last: 'Lovelace',
+        born: 1815
+        })
+
+
+        const { itemName , itemPic } = this.props.route.params;
+        this.setState({itemName:itemName, itemPic:itemPic})
+        
+    }
+
+    send = async () => {
+        var Data = this.state.Data
+        Data.push({id:this.state.inputMessage,message:this.state.inputMessage});
+        this.setState({Data:Data,inputMessage:''})
+
+        const docRef = firebase.firestore().collection('chats').doc('alovelace')
+        
+
     };
 
-    var txt = []
-    for (var i = 5; i < Data.length; i++){
-        txt.push(<Sent key={Data[i].id} message={Data[i].message}/>);
-    }
-    console.log(Data)
+    render(){
+        
+        return(
+        
+            <ImageBackground
+            source={{uri: this.state.itemPic}}  style={styles.image} resizeMode={'repeat'} 
+            style={styles.gradient}
+           >
+                <KeyboardAvoidingView   behavior={Platform.OS === "ios" ? "padding" : "height"} style={{flex:1}}>
+                <View style={styles.fondo}>
+               
+               <View style={styles.headerContainer}>
+                        <TouchableOpacity
+                            onPress={()=>this.props.navigation.goBack()}
+                        >
+                            <Icon name='left' color='#FFF' size={Dimensions.get('window').width/10}/>
+                        </TouchableOpacity>
+                        <Text style={styles.username}>{this.state.itemName}</Text>
+                        <Image source={{uri:this.state.itemPic}} style={styles.avatar}/>
+                </View>
+                    
+               <View   style={styles.ops}>
+               
+                    <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}   ref={ref => {this.scrollView = ref}}
+    onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}>
+                    
+                    
+                        <LastWatch  checkedOn='Yesterday'/>
+                        <Received 
+                            message={Data[0].message}
+                        />
+                        <Sent
+                            message={Data[1].message}
+                        />
+                        <Received 
+                            message={Data[2].message}
+                        />
+                         <Sent
+                            message={Data[3].message}
+                        />
+                        <LastWatch  checkedOn='Hoy'/>
+                        <Received 
+                            message={Data[4].message}
+                        />
+                        <Received 
+                            message={Data[4].message}
+                        />
+                        {
+                             this.state.Data.map((item, index) => (
+                                <Sent
+                                message={item.message}
+                            />
 
-    return(
-        <ImageBackground
-        source={{uri: itemPic}}  style={styles.image} resizeMode={'repeat'} 
-        style={styles.gradient}
-       >
-            <View style={styles.fondo}>
-           
-           <View style={styles.headerContainer}>
-                    <TouchableOpacity
-                        onPress={()=>navigation.goBack()}
-                    >
-                        <Icon name='left' color='#FFF' size={Dimensions.get('window').width/10}/>
-                    </TouchableOpacity>
-                    <Text style={styles.username}>{itemName}</Text>
-                    <Image source={{uri:itemPic}} style={styles.avatar}/>
-            </View>
-                
-           <View style={styles.ops}>
+                             ))
+                        }
+                        <View style= {{height:70}}>
+    
+                        </View>
               
-                <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}   ref={scrollViewRef}
-      onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
-                
-                
-                    <LastWatch  checkedOn='Yesterday'/>
-                    <Received 
-                        message={Data[0].message}
-                    />
-                    <Sent
-                        message={Data[1].message}
-                    />
-                    <Received 
-                        message={Data[2].message}
-                    />
-                     <Sent
-                        message={Data[3].message}
-                    />
-                    <LastWatch  checkedOn='Hoy'/>
-                    <Received 
-                        message={Data[4].message}
-                    />
-                    <Received 
-                        message={Data[4].message}
-                    />
-                    <View>
-                        {txt}
-                    </View>
-                    <View style= {{height:70}}>
-
-                    </View>
+                    </ScrollView>
+                    
+              <Input
+                inputMessage={this.state.inputMessage}
+                setMessage={(inputMessage)=> this.setState({inputMessage})}
+                onSendPress={this.send}
+              />
+              </View>
+              </View>
+              </KeyboardAvoidingView>
+          </ImageBackground>
           
-                </ScrollView>
-                
-          <Input
-            inputMessage={inputMessage}
-            setMessage={(inputMessage)=> setMessage(inputMessage)}
-            onSendPress={send}
-          />
-          </View>
-          </View>
-      </ImageBackground>
-    )
+        )
+    }
 }
-export default Discussion;
 
 const styles = StyleSheet.create({
     container:{
@@ -162,7 +197,9 @@ const styles = StyleSheet.create({
         borderColor:'#B73D00'
     },
     scroll:{
-        paddingBottom:100,
+        flex:1,
+        height:'100%'
+
     },
     
     fondo:{
