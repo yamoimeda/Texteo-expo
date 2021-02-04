@@ -24,28 +24,42 @@ export default class Discussion extends Component {
         }
     }
     componentDidMount (){
-        const docRef = firebase.firestore().collection('users').doc('alovelace')
-
-        docRef.set({
-        first: 'Ada',
-        last: 'Lovelace',
-        born: 1815
-        })
-
-
+       
         const { itemName , itemPic } = this.props.route.params;
         this.setState({itemName:itemName, itemPic:itemPic})
+
+        
         
     }
 
     send = async () => {
+      var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+    var hora = hours-12
+    if (hora > 0){
+        hora = hora
+    } else{
+        hora= hours
+    }
+    
+    
         var Data = this.state.Data
         Data.push({id:this.state.inputMessage,message:this.state.inputMessage});
-        this.setState({Data:Data,inputMessage:''})
-
-        const docRef = firebase.firestore().collection('chats').doc('alovelace')
         
+        const docRef = firebase.firestore().collection('chats').doc('D9c82KP8S4zhtoNVJt37').collection('mensajes')
+    
+        await docRef.add({     
+            mesaje: this.state.inputMessage,
+            user: 'bt8KmtMpbicxRyqDvrb1',
+            tiempo: date + '-' + month + '-' + year + ' ' + hora + ':' +min + ':' + sec
+  
+        })
 
+        this.setState({Data:Data,inputMessage:''})
     };
 
     render(){
@@ -63,7 +77,7 @@ export default class Discussion extends Component {
                         <TouchableOpacity
                             onPress={()=>this.props.navigation.goBack()}
                         >
-                            <Icon name='left' color='#FFF' size={Dimensions.get('window').width/10}/>
+                            <Icon name='left' color='#FFF' size={Dimensions.get('window').width/12}/>
                         </TouchableOpacity>
                         <Text style={styles.username}>{this.state.itemName}</Text>
                         <Image source={{uri:this.state.itemPic}} style={styles.avatar}/>
@@ -98,6 +112,7 @@ export default class Discussion extends Component {
                         {
                              this.state.Data.map((item, index) => (
                                 <Sent
+                                key={index}
                                 message={item.message}
                             />
 

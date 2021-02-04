@@ -7,7 +7,8 @@ import { default as theme } from './theme.json';
 import * as eva from '@eva-design/eva';
 import  PantallaInicio  from "./pantallas/inicio";
 import  Chat  from "./pantallas/chat";
-
+import  Registar  from "./pantallas/registrar";
+import * as SQLite from 'expo-sqlite';
 
 const Stack = createStackNavigator();
 
@@ -36,18 +37,29 @@ function Chats({route, navigation }) {
 }
 
 
+function Registrar({route, navigation }) {
+  return (
+    <Registar navigation = {navigation} route={route}/>
+  );
+}
+
+
+
 
 
 export default function App() {
   return (
   
     <NavigationContainer>
-    <Stack.Navigator   screenOptions={{
+    <Stack.Navigator   
+      initialRouteName="Registrar"
+      screenOptions={{
     headerShown: false
   }}>
-      
+      <Stack.Screen name="Registrar" component={Registrar} />
       <Stack.Screen name="Inicio" component={Inicio} />
       <Stack.Screen name="Chats" component={Chats} />
+      
     </Stack.Navigator>
     </NavigationContainer>
   );

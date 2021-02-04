@@ -15,8 +15,13 @@ import Fonta from '@expo/vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
 import Perfiles from '../componentes/perfil';
 import Messages from '../componentes/mensajes';
+import { firebase } from '../firebase/config';
+import {Colors} from '../componentes/Colors';
 
 const URL = `https://api.github.com/users`;
+
+import * as Contacts from 'expo-contacts';
+    
 
 export default  class Chats extends Component {
     
@@ -29,14 +34,44 @@ export default  class Chats extends Component {
           setLoading:true,
           chat:true,
           opt:false,
-          perfil:false
+          perfil:false,
+          user: 'bt8KmtMpbicxRyqDvrb1'
         }
     }
     showHideText = () => {
       this.setState({isHidden : !this.state.isHidden})
     }
 
-    componentDidMount = async () => {
+    async componentDidMount() {
+
+
+        const { status } = await Contacts.requestPermissionsAsync();
+            if (status === 'granted') {
+                const { data } = await Contacts.getContactsAsync({
+                fields: [Contacts.Fields.PhoneNumbers,Contacts.Fields.Name],
+                });
+
+                if (data.length > 0) {
+                const contact = data[0];
+                console.log(contact);
+        }
+      }
+        
+        const doc = firebase.firestore().collection('chats');
+
+        const snapshot = await doc.where('users','array-contains',this.state.user).get();
+        if (snapshot.empty) {
+            console.log('No matching documents.');
+            return;
+          }  
+          
+          snapshot.forEach(doc => {
+
+
+            console.log(doc.id, '=>', doc.data());
+          });
+
+       
         const resp = await fetch(URL);
         const data = await resp.json();
         this.setState({data: data,loading:false,setLoading:false});
@@ -51,7 +86,7 @@ export default  class Chats extends Component {
            
            <View style={styles.headerContainer}>
                 <Text style={styles.header}>Mensajes</Text>
-                <Icon name='add' color='#fff' size={Dimensions.get('window').width/10}/>
+                <Icon name='add' color='#fff' size={Dimensions.get('window').width/11}/>
 
 
                 
@@ -106,7 +141,7 @@ export default  class Chats extends Component {
 
 const styles = StyleSheet.create({
     list:{
-        backgroundColor:'#000816',
+        backgroundColor:Colors.oscuro,
     },
     card:{
         marginLeft:300,
@@ -127,13 +162,14 @@ const styles = StyleSheet.create({
         height:'10%',
         flexDirection:'row',
         alignItems:'center',
+        paddingTop:5
 
     },
     header:{
         fontFamily:'Montserrat_800ExtraBold',
-        color:'#FFF',
+        color:Colors.blanco,
         flex:1,
-        fontSize: Dimensions.get('window').width/15
+        fontSize: Dimensions.get('window').width/16
     },
     proContainer:{
         marginRight:-20,
@@ -144,7 +180,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius:40,
         borderTopRightRadius:40,
         height: '90%',
-        backgroundColor:'#000816',
+        backgroundColor: Colors.oscuro,
         marginHorizontal:-20,
         
     },
@@ -156,11 +192,11 @@ const styles = StyleSheet.create({
         paddingBottom:10,
         alignItems:'center',
         borderBottomWidth:1,
-        borderColor:'#ce7329'
+        borderColor:Colors.principal
     },
     day:{
         fontFamily:'Montserrat_800ExtraBold',
-        color:'#FFF',
+        color:Colors.blanco,
         flex:1,
         fontSize:20
     },

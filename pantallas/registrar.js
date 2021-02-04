@@ -1,8 +1,9 @@
 
 import React, { useState, Component } from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View,StyleSheet } from 'react-native'
+import {Colors} from '../componentes/Colors';
+import { StackActions, NavigationActions } from 'react-navigation';
 
-import { firebase } from '../../firebase/config'
 export default  class Chats extends Component {
     
     constructor(props){
@@ -12,7 +13,7 @@ export default  class Chats extends Component {
           data:undefined,
           loading:true, 
           setLoading:true,
-          chat:true,
+          email:'',
           opt:false,
           perfil:false
         }
@@ -21,48 +22,55 @@ export default  class Chats extends Component {
       this.setState({isHidden : !this.state.isHidden})
     }
 
-    componentDidMount = async () => {
-        const resp = await fetch(URL);
-        const data = await resp.json();
-        this.setState({data: data,loading:false,setLoading:false});
+    registrar() {
 
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Inicio' })],
+          });
+          this.props.navigation.dispatch(resetAction);
+
+    }
+
+    componentDidMount = async () => {
+      
     }
     render() {
       return (
         <View style={styles.container}>
             <View
-                style={{ flex: 1, width: '100%' }}>
+                style={{ height:'30%', width: '100%',marginTop:30 }}>
                 <Image
                     style={styles.logo}
                     source={require('../componentes/icon.png')}
                 />
-                <TextInput
-                    style={styles.input}
-                    placeholder='Nombre'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
+                   
+            </View>
+            <View  style={{ height:'70%', width: '100%'}}>
+                <View  style={styles.inputview}>
+                    <View style={{justifyContent:'center',paddingLeft:30}}>
+                    <Image
+                    style={styles.bandera}
+                    source={require('../componentes/panama.png')}
                 />
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    secureTextEntry
-                    placeholder='Password'
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
+                    </View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Numero de Celuar'
+                        placeholderTextColor="#aaaaaa"
+                        onChangeText={(numero) => this.setState({numero})}
+                        value={this.state.numero}
+                        underlineColorAndroid="transparent"
+                        autoCapitalize="none"
+                    />
+
+                </View>
+               
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => onLoginPress()}>
-                    <Text style={styles.buttonTitle}>Log in</Text>
+                    onPress={() => this.registrar()}>
+                    <Text style={styles.buttonTitle}>REGISTRARME</Text>
                 </TouchableOpacity>
-                <View style={styles.footerView}>
-                    <Text style={styles.footerText}>Don't have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text></Text>
-                </View>
             </View>
         </View>
       );
@@ -73,31 +81,31 @@ export default  class Chats extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: Colors.oscuro
     },
     title: {
 
     },
     logo: {
-        flex: 1,
-        height: 120,
-        width: 90,
+        height: 150,
+        width: 150,
         alignSelf: "center",
-        margin: 30
     },
     input: {
         height: 48,
+        width:'65%',
         borderRadius: 5,
         overflow: 'hidden',
         backgroundColor: 'white',
         marginTop: 10,
         marginBottom: 10,
-        marginLeft: 30,
+        marginLeft: 20,
         marginRight: 30,
         paddingLeft: 16
     },
     button: {
-        backgroundColor: '#788eec',
+        backgroundColor: Colors.principal,
         marginLeft: 30,
         marginRight: 30,
         marginTop: 20,
@@ -124,5 +132,12 @@ const styles = StyleSheet.create({
         color: "#788eec",
         fontWeight: "bold",
         fontSize: 16
-    }
+    },
+    inputview:{
+        flexDirection:'row',
+        justifyContent:'center'
+    },
+    bandera: {
+        alignSelf: "center",
+    },
 })
